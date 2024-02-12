@@ -8,8 +8,14 @@ Bootstrap a CDK using Deno.
 
 ```sh
 # Bootstrap a CDK using Deno
+# Run in a empty directory
 alias cdk="deno run -A npm:aws-cdk"
 export AWS_REGION=ap-northeast-1
+cat << EOF > cdk.json
+{
+  "app": "deno run -A https://raw.githubusercontent.com/jlandowner/deno-cdk-iam-creds/main/cdk.ts"
+}
+EOF
 cdk bootstrap
 ```
 
@@ -17,11 +23,8 @@ Create a IAM User and generate access key.
 (remove `-A` option for a secure execution)
 
 ```sh
-# Configure example cdk app
-CDK_IAM_USER='deno run -A https://raw.githubusercontent.com/jlandowner/deno-cdk-iam-creds/main/cdk.ts'
-
 # Create a default IAM User and generate access key.
-cdk --app "$CDK_IAM_USER" deploy
+cdk deploy
 
 # Retreive the secerts from Secrets Manager.
 deno run -A https://raw.githubusercontent.com/jlandowner/deno-cdk-iam-creds/main/mod.ts
@@ -40,7 +43,7 @@ After you get the credentails, you should disable the secret by `disableSecret` 
 
 ```sh
 # Delete the secrets in Secrets Manager.
-cdk --app "$CDK_IAM_USER" deploy --context disableSecret=1
+cdk deploy --context disableSecret=1
 
 # After disabled, you cannot get the secerts.
 deno run -A https://raw.githubusercontent.com/jlandowner/deno-cdk-iam-creds/main/mod.ts
@@ -50,14 +53,14 @@ Also, you can create the secret again by just deploying again.
 
 ```sh
 # Create the secret again
-cdk --app "$CDK_IAM_USER" deploy
+cdk deploy
 ```
 
 To clean up the user, just destroy the cdk app.
 
 ```sh
 # Cleen up
-cdk --app "$CDK_IAM_USER" destroy 
+cdk destroy 
 ```
 
 ### Use with your app
@@ -105,16 +108,12 @@ new IAMUserStack(app, "IAMUserStack", {
 app.synth();
 ```
 
-Save as `yourapp.ts`. Then, set env to use the app and deploy the cdk app.
+Save as `yourapp.ts`. Then, update `cdk.json` and deploy the cdk app.
 
-```sh
-# Configure example cdk app
-CDK_IAM_USER='deno run -A yourapp.ts'
-
-# Deploy your app
-cdk --app "$CDK_IAM_USER" deploy
-
-# ...
+```json
+{
+  "app": "deno run -A yourapp.ts"
+}
 ```
 
 ### Retreive the secret value in your Deno program
