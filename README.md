@@ -129,9 +129,6 @@ import { getIAMCredentialSecretByStack } from "https://raw.githubusercontent.com
 
 const secret = await getIAMCredentialSecretByStack("IAMUserStack");
 
-const b64AccessKey = encodeBase64(secret.AWS_ACCESS_KEY_ID);
-const b64SecretAccessKey = encodeBase64(secret.AWS_SECRET_ACCESS_KEY);
-
 Deno.writeTextFileSync("secret.yaml", stringify({
   apiVersion: "v1",
   kind: "Secret",
@@ -139,8 +136,8 @@ Deno.writeTextFileSync("secret.yaml", stringify({
     name: "aws-credentials-secret",
   },
   data: {
-    AWS_ACCESS_KEY_ID: b64AccessKey,
-    AWS_SECRET_ACCESS_KEY: b64SecretAccessKey,
+    AWS_ACCESS_KEY_ID: encodeBase64(secret.AWS_ACCESS_KEY_ID),
+    AWS_SECRET_ACCESS_KEY: encodeBase64(secret.AWS_SECRET_ACCESS_KEY),
   },
 }));
 ```
