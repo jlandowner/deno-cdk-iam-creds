@@ -1,0 +1,15 @@
+{
+  "tasks": {
+    "cdk": "deno run -A npm:aws-cdk"
+  },
+  "lint": {
+    "files": {
+      "exclude": ["cdk.out"]
+    }
+  },
+  "fmt": {
+    "files": {
+      "exclude": ["cdk.out"]
+    }
+  }
+}

@@ -1,0 +1,3 @@
+{
+  "app": "deno run -A cdk.ts"
+}
