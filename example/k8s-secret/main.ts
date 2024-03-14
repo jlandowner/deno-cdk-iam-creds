@@ -20,4 +20,4 @@ const sec = stringify({
   },
 });
 
-Deno.writeTextFileSync("secret.yaml", sec);
+console.log(sec);
